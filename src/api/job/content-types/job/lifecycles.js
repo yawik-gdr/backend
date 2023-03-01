@@ -26,7 +26,7 @@ module.exports = {
     if (data?.params?.data?.html) {
       let _htmlFile = data?.params?.data?.html;
       _htmlFile = _htmlFile && _htmlFile.length && _htmlFile[0].url;
-      _mergeContent.push({ name: "link", content: encodeURI("https://api.yawik.org" + _htmlFile) })
+      _mergeContent.push({ name: "link", content: encodeURI("http://localhost:1337" + _htmlFile) })
     }
     const publishedJob = await strapi.api.job.services.job.findOne(data.result.id, {
         populate: "*"
@@ -66,11 +66,11 @@ module.exports = {
     // 'Job Created', 'contact@yawik.org', 'de-job-created-check', _mergeContent);
 
     console.log("_finalRes in lifecycle =====------=====------>>", _finalRes)
-    // await strapi.plugins['email'].services.email.send({
-    //     to: 'bleek@cross-solution.de',
-    //     subject: 'Job Created',
-    //     text: 'Job Created',
-    //     html: `<div><div>OK5 New job created: </div><div>ID:${data.result.id} </div></div>`,
-    // });
+    await strapi.plugins['email'].services.email.send({
+         to: 'barais@irisa.fr', //TODO update
+         subject: 'Job Created',
+         text: 'Job Created',
+         html: `<div><div>OK5 New job created: </div><div>ID:${data.result.id} </div></div>`,
+     });
   },
 };

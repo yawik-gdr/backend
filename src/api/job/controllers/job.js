@@ -46,8 +46,7 @@ module.exports = createCoreController("api::job.job", ({ strapi }) => ({
         ctx.request.header.authorization
       ) {
         const bodyData = ctx.request.body && ctx.request.body.data ? JSON.parse(ctx.request.body.data) : {};
-        console.log(bodyData);
-        const newJob = createJobObject(bodyData); 
+        const newJob = createJobObject(bodyData);
         const job = await createJob(strapi, ctx.state.user.id, newJob, ctx.request.files, bodyData.html);
         console.log('Debug OK5');
         return job;
@@ -73,12 +72,13 @@ module.exports = createCoreController("api::job.job", ({ strapi }) => ({
     }
   },
   async find(ctx) {
+
     try {
       if (
         ctx.request &&
         ctx.request.header &&
         ctx.request.header.authorization
-      ) {  
+      ) {
         let strapiUser = ctx.state.user.id;
         let filter = {}
 
@@ -86,16 +86,16 @@ module.exports = createCoreController("api::job.job", ({ strapi }) => ({
           filter =  JSON.parse(ctx.request.query.filters);
         }
 
-        ctx.query = { 
-          ...ctx.query, 
+        ctx.query = {
+          ...ctx.query,
           publicationState: 'preview',
           filters: {
             user: strapiUser,
             ...filter
-          } 
+          }
         }
         console.log('authenticated user', strapiUser, ctx.query);
-        let job = await getJobs(ctx.query);
+        let job = await getJobs(ctx.query,true);
         return job;
       } else {
         console.log('anonymous request');
@@ -119,11 +119,11 @@ module.exports = createCoreController("api::job.job", ({ strapi }) => ({
       console.log("FIND ONE", id);
       //let job = await strapi.service("api::job.job").findOne(id);
       let job = await strapi.entityService.findOne('api::job.job', id, {
-        populate: { 
+        populate: {
           logo: true,
           html: true,
           header: true,
-          org: true 
+          org: true
         },
         publicationState: 'preview',
       });
@@ -153,7 +153,7 @@ module.exports = createCoreController("api::job.job", ({ strapi }) => ({
       ) {
         console.log("START update", ctx);
         console.log("HTML: ", ctx.request.files);
-        
+
         const bodyData = ctx.request.body && ctx.request.body.data ? JSON.parse(ctx.request.body.data) : {}
         const strapiUser = ctx.state.user.id;
         const newJob = createJobObject(bodyData);
@@ -162,7 +162,7 @@ module.exports = createCoreController("api::job.job", ({ strapi }) => ({
         newJob.data.user = strapiUser;
         let job = await strapi.service("api::job.job").update(id, newJob);
         uploadFiles(strapi, html, bodyData.id);
-        
+
         return {
           success: {
             job: job
@@ -193,13 +193,13 @@ module.exports = createCoreController("api::job.job", ({ strapi }) => ({
         console.log("START delete", ctx);
         let strapiUser = ctx.state.user.id
         if (strapiUser) {
-          ctx.query = { 
-            ...ctx.query, 
+          ctx.query = {
+            ...ctx.query,
             filters: {
               user: strapiUser
             }
           }
-          
+
           let job = await strapi.service("api::job.job").delete(id, ctx.query);
           return {
             success: {
@@ -229,14 +229,14 @@ module.exports = createCoreController("api::job.job", ({ strapi }) => ({
         },
       };
     }
-  },   
+  },
 }));
 
 // ================= HELPER FUNCTIONS FOR JOBS AD ===========
 
 /**
  * INFO: Prepare data to create job
- * @param {Object} payload 
+ * @param {Object} payload
  * @returns Jobs object
  */
 const createJobObject = (payload) => {
@@ -276,7 +276,7 @@ const createJobObject = (payload) => {
  * Deprecated. Not needed anymore
  *
  * INFO: Authenticate user from token
- * @param {Token} authorization 
+ * @param {Token} authorization
  * @returns authenticated user
  */
 const authUser = async (authorization) => {
@@ -302,10 +302,10 @@ const authUser = async (authorization) => {
 
 /**
  * INFO:Upload job ad file
- * @param {Scope} strapi 
- * @param {File} file 
- * @param {Object} html 
- * @param {String} jobId 
+ * @param {Scope} strapi
+ * @param {File} file
+ * @param {Object} html
+ * @param {String} jobId
  * @returns File objects
  */
 const htmlUpload = async (strapi, file, html, jobId) => {
@@ -324,10 +324,10 @@ const htmlUpload = async (strapi, file, html, jobId) => {
 
 /**
  * INFO:Upload orgnization logo file
- * @param {Scope} strapi 
- * @param {File} file 
- * @param {Object} logo 
- * @param {String} jobId 
+ * @param {Scope} strapi
+ * @param {File} file
+ * @param {Object} logo
+ * @param {String} jobId
  * @returns File objects
  */
 const logoUpload = async (strapi, file, logo, jobId) => {
@@ -344,10 +344,10 @@ const logoUpload = async (strapi, file, logo, jobId) => {
 
 /**
  * INFO:Upload orgnization header file
- * @param {Scope} strapi 
- * @param {File} file 
- * @param {Object} header 
- * @param {String} jobId 
+ * @param {Scope} strapi
+ * @param {File} file
+ * @param {Object} header
+ * @param {String} jobId
  * @returns File objects
  */
 const headerUpload = async (strapi, file, header, jobId) => {
@@ -364,11 +364,11 @@ const headerUpload = async (strapi, file, header, jobId) => {
 
 /**
  * INFO: Create job
- * @param {Scope} strapi 
- * @param {String} strapiUserId 
- * @param {Object} Jobs 
- * @param {Files} file 
- * @param {Object} html 
+ * @param {Scope} strapi
+ * @param {String} strapiUserId
+ * @param {Object} Jobs
+ * @param {Files} file
+ * @param {Object} html
  * @returns Job success
  */
 const createOrgnization = async (strapi, orgName, JobId, file, logo, header) => {
@@ -396,11 +396,11 @@ const createOrgnization = async (strapi, orgName, JobId, file, logo, header) => 
 
 /**
  * INFO: Create job
- * @param {Scope} strapi 
- * @param {String} strapiUserId 
- * @param {Object} Jobs 
- * @param {Files} file 
- * @param {Object} html 
+ * @param {Scope} strapi
+ * @param {String} strapiUserId
+ * @param {Object} Jobs
+ * @param {Files} file
+ * @param {Object} html
  * @returns Job success
  */
 const createJob = async (strapi, strapiUserId, Jobs, file, html) => {
@@ -419,10 +419,46 @@ const createJob = async (strapi, strapiUserId, Jobs, file, html) => {
 
 /**
  * INFO: Get all jobs
- * @param {Object} payload 
+ * @param {Object} payload
  * @returns All jobs array
  */
-const getJobs = async (payload = null) => {
+const getJobs = async (payload = null, preview = false) => {
+  console.log(payload);
+  let filter = {}
+  console.log('payload.filters')
+  console.log(payload.filters)
+  if (payload.filters !== undefined &&
+  typeof payload.filters === "object" &&
+  !Array.isArray(payload.filters) &&
+  payload.filters !== null ){
+    filter = payload.filters ;
+  } else {
+    if (payload && payload.filters) {
+      filter =  JSON.parse(payload.filters);
+    }
+
+  }
+
+  if (preview){
+    payload = {
+      ...payload,
+      publicationState: 'preview',
+      filters: {
+        ...filter
+      }
+    }
+
+  }  else {
+    payload = {
+      ...payload,
+      publicationState: 'live',
+      filters: {
+        ...filter
+      }
+    }
+
+  }
+
   let job = payload ? await strapi.service("api::job.job").find(payload): await strapi.service("api::job.job").find();
   return {
     data: job.results.map( val => {

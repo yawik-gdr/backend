@@ -7,5 +7,5 @@ module.exports = ({ env }) => ({
     enabled: true,
     tasks: cronTasks,
   },
-  url: env('STRAPI_PUBLIC_URL', 'https://api.yawik.org')
+  url: env('STRAPI_PUBLIC_URL', 'http://localhost:1337')
 });

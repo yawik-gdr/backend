@@ -13,11 +13,11 @@ module.exports = {
       PORT: 3000
     }
   }],
-  
+
   deploy : {
     production: {
       user : 'yawik',
-      host : 'api.yawik.org',
+      host : 'locahost',
       ref  : 'origin/main',
       repo : 'https://gitlab.com/yawik/backend.git',
       path : '/home/yawik/api.yawik.org',
@@ -32,6 +32,6 @@ module.exports = {
       path : '/home/strapi/api.yawik.org',
       'pre-deploy-local' : 'rsync -a --delete /home/strapi/backend/build/ /home/strapi/pm2/build/',
       'post-deploy' : 'pm2 startOrRestart ecosystem.config.js --interpreter bash --env development'
-    }    
+    }
   }
 };

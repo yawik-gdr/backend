@@ -9,17 +9,25 @@
     "build": "yarn strapi build",
     "build:mail": "./node_modules/.bin/mjml ./mjml/de/job-created.mjml --config.filePath ./mjml/de/partials/ --output ./mjml/de/job-created.html",
     "strapi": "strapi",
-    "test": "jest --forceExit --detectOpenHandles"
+    "test": "jest --forceExit --detectOpenHandles",
+    "docker:build": "docker build  --no-cache -t barais/jobbackend .",
+    "docker:push": "docker save barais/jobbackend > jobbackend.tar && scp jobbackend.tar zprojet@gdrgpl2023.istic.univ-rennes1.fr:~ && rm -f jobbackend.tar"
   },
   "dependencies": {
-    "@strapi/plugin-documentation": "4.1.12",
-    "@strapi/plugin-i18n": "4.1.12",
-    "@strapi/plugin-users-permissions": "4.1.12",
-    "@strapi/provider-email-nodemailer": "4.1.12",
-    "@strapi/strapi": "4.1.12",
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@strapi/plugin-documentation": "4.6.1",
+    "@strapi/plugin-i18n": "4.6.1",
+    "@strapi/plugin-users-permissions": "4.6.1",
+    "@strapi/provider-email-nodemailer": "4.6.1",
+    "@strapi/strapi": "4.6.1",
     "axios": "^0.25.0",
     "koa-sendfile": "^3.0.0",
+    "moment": "^2.29.4",
+    "solr-client": "^0.10.0-rc10",
     "sqlite3": "^5.0.8",
+    "strapi-plugin-custom-api": "^1.0.4",
+    "strapi-plugin-init-admin-user": "^0.2.1",
     "strapi-plugin-sitemap": "^2.0.7"
   },
   "devDependencies": {
@@ -34,7 +42,7 @@
     "uuid": "f59ec2ba-d592-4290-847c-5183c3dfe382"
   },
   "engines": {
-    "node": ">=12.x.x <=16.x.x",
+    "node": ">=12.x.x <=18.x.x",
     "npm": ">=6.0.0"
   },
   "jest": {

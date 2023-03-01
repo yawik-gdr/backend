@@ -1,5 +1,5 @@
 # "common" stage
-FROM node:14-alpine AS yawik_common
+FROM node:16-alpine AS yawik_common
 
 MAINTAINER "Anthonius Mutnhi
 
@@ -27,13 +27,16 @@ COPY ./ .
 # "development" stage build
 # depends on the "common" stage above
 FROM yawik_common as yawik_dev
+COPY ./.env.dev ./.env
+
 CMD ["yarn", "dev"]
 
 # "production" stage build
 # depends on the "common" stage above
-FROM build_common AS yawik_prod
+FROM yawik_common AS yawik_prod
 
 ENV NODE_ENV production
+COPY ./.env.prod ./.env
 
 RUN set -eux; \
     yarn build

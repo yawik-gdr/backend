@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "custom_apis",
+  "info": {
+    "singularName": "custom-api",
+    "pluralName": "custom-apis",
+    "displayName": "Custom API",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    },
+    "content-type-builder": {
+      "visible": true
+    }
+  },
+  "attributes": {}
+}
